@@ -1,8 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace Lana;
+namespace Goat\Sides;
 
-use \Lana\Interfaces\Container;
+use \Goat\Base;
+use \Goat\Container;
 
 /** 
  * The department responsible for the functions on the Admin site.
@@ -17,9 +18,9 @@ class Admin extends Base
     /**
      * @param array $container 
      */
-    public function __construct(Container $container)
+    public function __construct(Container $Container)
     {
-        $this->container = $container;
+        $this->Container = $Container;
     }
 
     /** 
@@ -28,7 +29,7 @@ class Admin extends Base
     public function run()
     {
         try {
-
+            
         } catch (\Exception $e) {
             $this->log()->error(
                 'Exception',
