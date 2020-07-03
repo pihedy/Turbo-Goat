@@ -22,4 +22,14 @@ if (!file_exists(GOAT_VENDOR_ROOT . DIRECTORY_SEPARATOR . 'autoload.php')) {
 /* Include autoload file. */
 require_once GOAT_VENDOR_ROOT . DIRECTORY_SEPARATOR . 'autoload.php';
 
+if (wp_doing_ajax()) {
+    /* TODO: Egyenlőre return null, de később call! */
+    return null;
+}
+
+if (wp_doing_cron()) {
+    /* TODO: Egyenlőre return null, de később call! */
+    return null;
+}
+
 
