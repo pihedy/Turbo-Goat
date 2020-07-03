@@ -11,10 +11,11 @@
         "vendor-dir": "src/app/Vendor"
     },
     "require": {
-        "php": ">=7.1.0",
+        "php": ">=7.2.5",
         "monolog/monolog": "^1.24",
         "pimple/pimple": "^3",
-        "nette/caching": "^3.0"
+        "nette/caching": "^3.0",
+        "illuminate/support": "^7.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^7",
