@@ -32,4 +32,10 @@ if (wp_doing_cron()) {
     return null;
 }
 
+/* Goat App Instance */
+$Goat = \Goat\App::getInstance();
 
+/* The party starts! ;) */
+$Goat->setContainer([
+    'modules' => Goat\Providers\ModuleProvider::boot()
+])->run();
