@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace Lana\Interfaces;
+namespace Goat\Interfaces;
 
 /** 
  * This is a determining interface for setting classes.

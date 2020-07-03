@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace Lana\Interfaces;
+namespace Goat\Interfaces;
 
 /** 
  * Defines the basic functions of the container class.

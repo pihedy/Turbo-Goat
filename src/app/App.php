@@ -1,9 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace Lana;
+namespace Goat;
 
 /** 
- * The App Class, which helps to install Lana.
+ * The App Class, which helps to install Goat.
  * 
  * Among other things, sharing the settings between the parties in a common container.
  * Part of the idea was given by the Slim framework.
@@ -14,12 +14,12 @@ namespace Lana;
 class App
 {
     /** 
-     * @var null|object Copy of the Lana App Class.
+     * @var null|self Copy of the Goat App Class.
      */
     private static $instances = null;
 
     /**
-     * @var object Class filled with the right party.
+     * @var \Goat\Sides\Admin|\Goat\Sides\Site Class filled with the right party.
      */
     private $Side;
 
@@ -51,8 +51,10 @@ class App
     /** 
      * This implementation lets you subclass the Singleton class while keeping
      * just one instance of each subclass around.
+     * 
+     * @return self
      */
-    public static function getInstance()
+    public static function getInstance(): self
     {
         if (is_null(static::$instances)) {
             static::$instances = new static;
@@ -67,14 +69,17 @@ class App
     public function setContainer($container = [])
     {
         if (is_array($container)) {
-            $container = new Container($container);
+            $Container = new Container($container);
         }
 
-        if (!$container instanceof Interfaces\Container) {
+        if (!$Container instanceof Interfaces\Container) {
             throw new \InvalidArgumentException('Container incorrectly specified.');
         }
 
-        $this->Side = \is_admin() ? \Lana\Admin::class : \Lana\Site::class;
+        $Side       = \is_admin() ? \Goat\Sides\Admin::class : \Goat\Sides\Site::class;
+        $this->Side = new $Side($Container);
+
+        return $this->Side;
     }
 
     /**
@@ -82,7 +87,7 @@ class App
      */
     public function install()
     {
-        \register_activation_hook(LANA_FILE, function () {
+        \register_activation_hook(GOAT_FILE, function () {
             /* NOTE: Ide jönnek az install funkciók ha kellenek! */
         });
     }
@@ -92,7 +97,7 @@ class App
      * 
      * The reason for its creation is to make the created Side object global.
      * 
-     * @return object 
+     * @return \Goat\Sides\Admin|\Goat\Sides\Site
      */
     public function getSide()
     {

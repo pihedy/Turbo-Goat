@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace Lana\Managers;
+namespace Goat\Managers;
 
 /** 
  * Provides service for template.
@@ -10,12 +10,12 @@ namespace Lana\Managers;
  * 
  * @author Pihe Edmond <pihedy@gmail.com>
  */
-class TemplateManager implements \Lana\Interfaces\Manager
+class TemplateManager implements \Goat\Interfaces\Manager
 {
     /** 
      * It points to the root of the template folder.
      */
-    protected const LANA_TEMPLATE_DIR = LANA_APP_ROOT . DIRECTORY_SEPARATOR . 'Templates';
+    protected const GOAT_TEMPLATE_DIR = GOAT_APP_ROOT . DIRECTORY_SEPARATOR . 'Templates';
 
     /** 
      * The object into which the property is loaded.
@@ -61,8 +61,8 @@ class TemplateManager implements \Lana\Interfaces\Manager
             $root = implode(DIRECTORY_SEPARATOR, $rootArray);
         }
 
-        if (file_exists(self::LANA_TEMPLATE_DIR . DIRECTORY_SEPARATOR . $root . '.php')) {
-            return self::LANA_TEMPLATE_DIR . DIRECTORY_SEPARATOR . $root . '.php';
+        if (file_exists(self::GOAT_TEMPLATE_DIR . DIRECTORY_SEPARATOR . $root . '.php')) {
+            return self::GOAT_TEMPLATE_DIR . DIRECTORY_SEPARATOR . $root . '.php';
         } else {
             return false;
         }

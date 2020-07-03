@@ -1,12 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace Lana;
+namespace Goat;
 
 use \Pimple\Container as PimpleContainer; 
-use \Lana\Interfaces\Container as CointainerInterface;
+use \Goat\Interfaces\Container as CointainerInterface;
 
 /** 
- * Lana container class to save settings.
+ * Goat container class to save settings.
  * 
  * Settings between the two sides can be requested and added. 
  * This also makes basic settings easier to access.
@@ -26,8 +26,8 @@ class Container extends PimpleContainer implements CointainerInterface
     /**
      * It verifies the existence of the key and returns to good value.
      * 
-     * @param string $key   The key you are looking for.
-     * @param mixed $return That's what she returns if she has no results.
+     * @param string    $key        The key you are looking for.
+     * @param mixed     $return     That's what she returns if she has no results.
      * 
      * @return mixed 
      */
@@ -43,8 +43,8 @@ class Container extends PimpleContainer implements CointainerInterface
     /**
      * You went down a key under the key.
      * 
-     * @param string $key   The key to which the value will be applied is the value.
-     * @param mixed $value  Data to be saved.
+     * @param string    $key    The key to which the value will be applied is the value.
+     * @param mixed     $value  Data to be saved.
      */
     public function set(string $key, $value)
     {
