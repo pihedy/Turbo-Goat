@@ -2,6 +2,10 @@
 
 namespace Goat;
 
+use \Goat\Builders\HookBuilder;
+use \Goat\Managers\TemplateManager;
+use \Monolog\Logger;
+
 /** 
  * Goat's basic class.
  * 
@@ -36,9 +40,9 @@ abstract class Base
     /** 
      * @param string $channel Specifies the channel name written in the queue.
      * 
-     * @return \Monolog\Logger $logger
+     * @return \Monolog\Logger
      */
-    public function log(string $channel = 'default')
+    public function log(string $channel = 'default'): Logger
     {
         $logger = new \Monolog\Logger($channel);
 
@@ -57,7 +61,7 @@ abstract class Base
      * 
      * @return \Goat\Managers\TemplateManager 
      */
-    public function template()
+    public function template(): TemplateManager
     {
         return new \Goat\Managers\TemplateManager();
     }
@@ -67,12 +71,12 @@ abstract class Base
      * 
      * @param object $class When called globally, the class is the first parameter.
      * 
+     * @return Goat\Builders\HookBuilder
+     * 
      * @throws \InvalidArgumentException    If one of the parameters is bad during the run.
      * @throws \Exception                   For other errors.
-     * 
-     * @return Goat\Builders\HookBuilder
      */
-    public function setHooks(?object $class = null)
+    public function setHooks(?object $class = null): HookBuilder
     {
         try {
             $HookBuilder = new \Goat\Builders\HookBuilder;
@@ -104,14 +108,14 @@ abstract class Base
     /**
      * The url of the file in the asset folder can be requested.
      * 
-     * @param string|null   $name   File name when you search.
-     * @param string        $type   File type when you search.
+     * @param   string|null   $name   File name when you search.
+     * @param   string        $type   File type when you search.
      * 
-     * @return string               File URL.
+     * @return  string  File URL.
      * 
      * @throws \Exception If direcotry not found.
      */
-    public function getAssetUrl(?string $name, string $type = 'image')
+    public function getAssetUrl(?string $name, string $type = 'image'): string
     {
         try {
             if (is_null($name)) {
@@ -146,8 +150,10 @@ abstract class Base
      * @param string        $url        The path to the script.
      * @param string        $type       Type of script.
      * @param null|string   $version    If you have a version, you will also get the version of the plugin otherwise.
+     * 
+     * @return void
      */
-    public function setScript(string $url, string $type, ?string $version = null)
+    public function setScript(string $url, string $type, ?string $version = null): void
     {
         try {
             $avalible = [

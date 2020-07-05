@@ -10,7 +10,7 @@ class Site extends Base
     /** 
      * Starting the site section.
      */
-    public function run()
+    public function run(): void
     {
         try {
 

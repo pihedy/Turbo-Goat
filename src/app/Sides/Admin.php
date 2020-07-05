@@ -18,7 +18,7 @@ class Admin extends Base
     /** 
      * Starting the admin section.
      */
-    public function run()
+    public function run(): void
     {
         try {
             
