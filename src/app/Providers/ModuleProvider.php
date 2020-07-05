@@ -2,14 +2,31 @@
 
 namespace Goat\Providers;
 
+use \Illuminate\Support\Collection;
+
+/**
+ * This provides the class with the module data to the Goat.
+ * 
+ * @author Pihe Edmond <pihedy@gmail.com>
+ */
 final class ModuleProvider
 {
-    private $modules;
+    /**
+     * A collection of modules found in the folder.
+     * 
+     * @var \Illuminate\Support\Collection
+     */
+    private $Modules;
 
-    public static function boot()
+    /**
+     * When loaded, it searches for all modules in the specified folder.
+     * 
+     * @return self 
+     */
+    public static function boot(): self
     {
         $modulesFolder = apply_filters(
-            'trubo_goat_modules_folder', 
+            'turbo_goat_modules_folder', 
             GOAT_SRC_ROOT . DIRECTORY_SEPARATOR . 'modules'
         );
 
@@ -19,36 +36,49 @@ final class ModuleProvider
             );
         }
 
-        $directories = array_filter(
-            glob($modulesFolder . DIRECTORY_SEPARATOR . '*', GLOB_ONLYDIR),
-            'is_dir'
-        );
-
         $directories = array_filter(array_map(function ($directory) {
-            if (!file_exists($directory . DIRECTORY_SEPARATOR . 'config.json')) {
+            if (!is_dir($directory)) {
+                return null;
+            } else if (!file_exists($directory . DIRECTORY_SEPARATOR . 'config.json')) {
                 return null;
             }
 
-            $Data = collect(
-                json_decode(
-                    file_get_contents(
-                        $directory . DIRECTORY_SEPARATOR . 'config.json'), 
-                        true
-                )
-            );
+            $moduleContent  = file_get_contents($directory . DIRECTORY_SEPARATOR . 'config.json');
+            $data           = json_decode($moduleContent, true);
 
-            if (!$Data->has(['name', 'start'])) {
+            if (!in_array('start', $data)) {
                 return null;
             }
 
-            $Data->put('path', $directory);
+            $data['path'] = $directory;
 
-            return $Data;
-        }, $directories));
+            return $data;
+        }, glob($modulesFolder . DIRECTORY_SEPARATOR . '*', GLOB_ONLYDIR)));
 
         $self           = new static;
-        $self->modules  = $directories;
+        $self->Modules  = collect($directories);
 
         return $self;
+    }
+
+    /**
+     * Returns the related modules in a collection based on a side name.
+     * If no key is specified, it returns with all modules.
+     * 
+     * @param null|string $sideName The name of the Side by which the search can go.
+     * 
+     * @return \Illuminate\Support\Collection 
+     */
+    public function getModulesData(?string $sideName = null): Collection
+    {
+        $Data = null;
+
+        if (!is_null($sideName)) {
+            $Data = $this->Modules->where('side', $sideName);
+        } else {
+            $Data = $this->Modules;
+        }
+
+        return $Data;
     }
 }
