@@ -37,5 +37,6 @@ $Goat = \Goat\App::getInstance();
 
 /* The party starts! ;) */
 $Goat->setContainer([
-    'modules' => Goat\Providers\ModuleProvider::boot()
+    'modules'   => \Goat\Providers\ModuleProvider::boot(),
+    'data'      => new \Goat\Repositories\DataRepository(new \Goat\Persistences\DataPersistence)
 ])->run();
