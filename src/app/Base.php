@@ -21,13 +21,12 @@ abstract class Base
     public $Container;
 
     /**
-     * A common variable between the parties.
-     * 
-     * Here, DecksRepository is uploaded between the two spaces.
-     * 
-     * @var DecksRepository
+     * @param array $container 
      */
-    public $DecksRepository;
+    public function __construct(Container $Container): void
+    {
+        $this->Container = $Container;
+    }
 
     /**
      * Abstraction of the boot function.

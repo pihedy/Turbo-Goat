@@ -3,7 +3,6 @@
 namespace Goat\Sides;
 
 use \Goat\Base;
-use \Goat\Container;
 
 /** 
  * The department responsible for the functions on the Admin site.
@@ -15,13 +14,6 @@ use \Goat\Container;
  */
 class Admin extends Base
 {
-    /**
-     * @param array $container 
-     */
-    public function __construct(Container $Container)
-    {
-        $this->Container = $Container;
-    }
 
     /** 
      * Starting the admin section.
