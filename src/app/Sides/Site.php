@@ -6,6 +6,7 @@ use \Goat\Base;
 
 class Site extends Base
 {
+    const SIDE_NAME = 'site';
 
     /** 
      * Starting the site section.

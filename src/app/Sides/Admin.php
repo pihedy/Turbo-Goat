@@ -14,6 +14,7 @@ use \Goat\Base;
  */
 class Admin extends Base
 {
+    const SIDE_NAME = 'admin';
 
     /** 
      * Starting the admin section.
