@@ -46,7 +46,7 @@ final class ModuleProvider
             $moduleContent  = file_get_contents($directory . DIRECTORY_SEPARATOR . 'config.json');
             $data           = json_decode($moduleContent, true);
 
-            if (!in_array('start', $data)) {
+            if (!array_key_exists('start', $data) || !array_key_exists('key', $data)) {
                 return null;
             }
 
