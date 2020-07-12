@@ -6,6 +6,9 @@ use \Goat\Base;
 
 class Site extends Base
 {
+    /**
+     * @var string A constant that specifies the name of the side.
+     */
     const SIDE_NAME = 'site';
 
     /** 

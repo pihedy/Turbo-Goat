@@ -186,6 +186,14 @@ abstract class Base
         }
     }
 
+    /**
+     * A class that makes a slug from a word or sentence.
+     * 
+     * @param string    $text   The word or phrase that is processed.
+     * @param string    $glue   The glue between the normalized word.
+     * 
+     * @return null|string The normalized word.
+     */
     public function slugify(string $text, string $glue = '_'): ?string
     {
         $text = preg_replace('~[^\pL\d]+~u', $glue, $text);

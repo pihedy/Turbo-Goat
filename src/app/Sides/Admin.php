@@ -14,6 +14,9 @@ use \Goat\Base;
  */
 class Admin extends Base
 {
+    /**
+     * @var string A constant that specifies the name of the side.
+     */
     const SIDE_NAME = 'admin';
 
     /** 
