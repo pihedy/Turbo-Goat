@@ -66,7 +66,7 @@ class App
     /**
      * @param array $container The settings array that will later be converted to the appropriate class.
      */
-    public function setContainer($container = [])
+    public function setContainer($container = []): object
     {
         if (is_array($container)) {
             $Container = new Container($container);
@@ -85,7 +85,7 @@ class App
     /**
      * Installation modules required.
      */
-    public function install()
+    public function install(): void
     {
         \register_activation_hook(GOAT_FILE, function () {
             /* NOTE: Ide jönnek az install funkciók ha kellenek! */
@@ -99,7 +99,7 @@ class App
      * 
      * @return \Goat\Sides\Admin|\Goat\Sides\Site
      */
-    public function getSide()
+    public function getSide(): object
     {
         return $this->Side;
     }

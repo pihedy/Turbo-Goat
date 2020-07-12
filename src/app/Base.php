@@ -27,7 +27,7 @@ abstract class Base
     /**
      * @param array $container 
      */
-    public function __construct(Container $Container): void
+    public function __construct(Container $Container)
     {
         $this->Container = $Container;
     }

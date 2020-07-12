@@ -13,12 +13,12 @@ final class DataRepository
         $this->Persistence = $Persistence;
     }
 
-    public function findByKey(string $key)
+    public function findByKey(string $key): Collection
     {
         return collect($this->Persistence->retrieve($key));
     }
 
-    public function save(string $key, array $data)
+    public function save(string $key, array $data): void
     {
         $this->Persistence->persist($key, $data);
     }
