@@ -1,5 +1,5 @@
 {
-    "name": "test-module",
+    "key": "test_module",
     "display_name": "Test Module",
     "version": "0.1.0",
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
