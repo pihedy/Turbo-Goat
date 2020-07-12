@@ -106,6 +106,40 @@ abstract class Base
     }
 
     /**
+     * Initializes the modules to the appropriate side.
+     * 
+     * @param string $sideName The name of the side.
+     * 
+     * @return void 
+     */
+    public function initModules(string $sideName): void
+    {
+        $Modules        = $this->Container->get('modules')->getModulesData($sideName);
+        $ModulesData    = $this->Container->get('data')->findByKey('module_statuses');
+
+        $Modules->each(function (array $module) use ($ModulesData) {
+            if ($ModulesData->isEmpty()) {
+                return false;
+            }
+
+            $data           = $ModulesData->where('key', $module['key']);
+            $starterFile    = $module['path'] . DIRECTORY_SEPARATOR . $module['start'];
+            
+            do_action('turbo_goat_before_init_module', $module, $data);
+
+            if (!file_exists($starterFile)) {
+                return true;
+            }
+
+            if ($data['status']) {
+                include $starterFile;
+            }
+
+            do_action('turbo_goat_after_init_module', $module, $data);
+        });
+    }
+
+    /**
      * The url of the file in the asset folder can be requested.
      * 
      * @param   string|null   $name   File name when you search.

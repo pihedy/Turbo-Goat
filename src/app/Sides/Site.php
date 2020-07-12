@@ -17,7 +17,7 @@ class Site extends Base
     public function run(): void
     {
         try {
-
+            $this->initModules(self::SIDE_NAME);
         } catch (\Exception $e) {
             $this->log()->error(
                 'Exception',
