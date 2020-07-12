@@ -27,7 +27,7 @@ final class ModuleProvider
     {
         $modulesFolder = apply_filters(
             'turbo_goat_modules_folder', 
-            GOAT_SRC_ROOT . DIRECTORY_SEPARATOR . 'modules'
+            GOAT_ROOT . DIRECTORY_SEPARATOR . 'modules'
         );
 
         if (!is_dir($modulesFolder)) {
