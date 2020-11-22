@@ -8,23 +8,31 @@
  * Text Domain: goat
  */
 
-/* No direct access. */
+/** 
+ * No direct access.
+ */
 defined('ABSPATH') or die;
 
-/* Plugin directory root. */
+/** 
+ * Plugin directory root.
+ */
 define('GOAT_ROOT', __DIR__);
 
-/* Plugin file path. */
+/** 
+ * Plugin file path.
+ */
 define('GOAT_FILE', __FILE__);
 
-/* SRC directory root. */
+/** 
+ * SRC directory root.
+ */
 define('GOAT_SRC_ROOT', GOAT_ROOT . DIRECTORY_SEPARATOR . 'src');
 
-/* Load bootstrap file. */
+/** 
+ * Load bootstrap file.
+ */
 if (!file_exists(GOAT_SRC_ROOT . DIRECTORY_SEPARATOR . 'bootstrap.php')) {
-    wp_die(
-        __('Bootstrap file not found!', 'goat')
-    );
+    wp_die(msg('error.bootstrap_not_found'));
 }
 
 require_once GOAT_SRC_ROOT . DIRECTORY_SEPARATOR . 'bootstrap.php';

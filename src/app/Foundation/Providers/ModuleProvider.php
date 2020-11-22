@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Goat\Providers;
+namespace Goat\Foundation\Providers;
 
 use \Illuminate\Support\Collection;
 
@@ -11,12 +11,24 @@ use \Illuminate\Support\Collection;
  */
 final class ModuleProvider
 {
-    /**
-     * A collection of modules found in the folder.
-     * 
-     * @var \Illuminate\Support\Collection
-     */
-    private $Modules;
+    protected $directory;
+
+    public function __construct()
+    {
+        $this->directory = apply_filters(
+            'turbo_goat_modules_folder', 
+            GOAT_ROOT . DIRECTORY_SEPARATOR . 'modules'
+        );
+    }
+
+    public function init()
+    {
+        $DirectoryIterator = new \DirectoryIterator($this->directory);
+
+        foreach ($DirectoryIterator as $Element) {
+            
+        }
+    }
 
     /**
      * When loaded, it searches for all modules in the specified folder.

@@ -6,20 +6,26 @@
  * @author Pihe Edmond <pihedy@gmail.com>
  */
 
-/* App directory root. */
+/** 
+ * App directory root.
+ */
 define('GOAT_APP_ROOT', GOAT_SRC_ROOT . DIRECTORY_SEPARATOR . 'app');
 
-/* Vendor directory root. */
+/** 
+ * Vendor directory root.
+ */
 define('GOAT_VENDOR_ROOT', GOAT_APP_ROOT . DIRECTORY_SEPARATOR . 'Vendor');
 
-/* If composer autoload not found then die. */
+/** 
+ * If composer autoload not found then die.
+ */
 if (!file_exists(GOAT_VENDOR_ROOT . DIRECTORY_SEPARATOR . 'autoload.php')) {
-    wp_die(
-        __('Before install composer!', 'goat')
-    );
+    wp_die(msg('error.install_composer'));
 }
 
-/* Include autoload file. */
+/** 
+ * Include autoload file.
+ */
 require_once GOAT_VENDOR_ROOT . DIRECTORY_SEPARATOR . 'autoload.php';
 
 if (wp_doing_ajax()) {
@@ -32,11 +38,14 @@ if (wp_doing_cron()) {
     return null;
 }
 
-/* Goat App Instance */
+/** 
+ * Goat App Instance.
+ */
 $Goat = \Goat\App::getInstance();
 
-/* The party starts! ;) */
+/** 
+ * The party starts! ;)
+ */
 $Goat->setContainer([
-    'modules'   => \Goat\Providers\ModuleProvider::boot(),
-    'data'      => new \Goat\Repositories\DataRepository(new \Goat\Persistences\DataPersistence)
+    'modules' => \Goat\Foundation\Providers\ModuleProvider::class
 ])->run();
