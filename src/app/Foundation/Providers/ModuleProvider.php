@@ -2,95 +2,116 @@
 
 namespace Goat\Foundation\Providers;
 
-use \Illuminate\Support\Collection;
+use \Goat\Interfaces\Provider;
+use \Goat\Traits\ProviderTrait;
 
 /**
  * This provides the class with the module data to the Goat.
  * 
  * @author Pihe Edmond <pihedy@gmail.com>
  */
-final class ModuleProvider
+class ModuleProvider implements Provider
 {
+    use ProviderTrait;
+
+    /**
+     * Registration keys.
+     * 
+     * @var array
+     */
+    protected $registers = [
+        'Configs',
+        'Modules'
+    ];
+
+    /**
+     * Location of the modules folder.
+     * 
+     * @var string
+     */
     protected $directory;
 
+    /**
+     * List of created and found modules.
+     * 
+     * @var array
+     */
+    protected $modules;
+
+    /**
+     * @return mixed 
+     */
     public function __construct()
     {
+        /** 
+         * @hook To change the position of the modules.
+         */
         $this->directory = apply_filters(
             'turbo_goat_modules_folder', 
             GOAT_ROOT . DIRECTORY_SEPARATOR . 'modules'
         );
     }
 
-    public function init()
+    /**
+     * Register the modules in the class.
+     * 
+     * @return void 
+     */
+    public function registerConfigs(): void
     {
         $DirectoryIterator = new \DirectoryIterator($this->directory);
 
         foreach ($DirectoryIterator as $Element) {
-            
+            if ($Element->isDot() || !$Element->isDir()) {
+                continue;
+            }
+
+            $path = $Element->getPathname();
+
+            if (!file_exists($path . DIRECTORY_SEPARATOR . 'config.json')) {
+                continue;
+            }
+
+            $config             = json_decode(file_get_contents($path . DIRECTORY_SEPARATOR . 'config.json'), true);
+            $config['path']     = $path;
+            $this->modules[]    = $config;
         }
     }
 
     /**
-     * When loaded, it searches for all modules in the specified folder.
+     * It launches the modules faithfully to the appropriate side.
      * 
-     * @return self 
+     * @return mixed 
      */
-    public static function boot(): self
+    public function registerModules()
     {
-        $modulesFolder = apply_filters(
-            'turbo_goat_modules_folder', 
-            GOAT_ROOT . DIRECTORY_SEPARATOR . 'modules'
-        );
-
-        if (!is_dir($modulesFolder)) {
-            throw new \Exception(
-                __('Does not point to a folder!', 'goat')
-            );
+        if (!is_array($this->modules) || empty($this->modules)) {
+            return null;
         }
 
-        $directories = array_filter(array_map(function ($directory) {
-            if (!is_dir($directory)) {
-                return null;
-            } else if (!file_exists($directory . DIRECTORY_SEPARATOR . 'config.json')) {
-                return null;
+        $modules = array_map(function ($module) {
+            /* TODO: Ez itt alapból false kell hogy legyen! */
+
+            /** 
+             * @hook The activity status of a module can be overridden.
+             */
+            $module['active'] = apply_filters('turbo_goat_module_activity_status', true, $module);
+
+            return $module;
+        }, $this->modules);
+
+        goat()->Container->set('modules', $modules);
+
+        foreach ($modules as $module) {
+            if (array_key_exists('side', $module) && $module['side'] !== goat()::SIDE_NAME) {
+                continue;
             }
 
-            $moduleContent  = file_get_contents($directory . DIRECTORY_SEPARATOR . 'config.json');
-            $data           = json_decode($moduleContent, true);
-
-            if (!array_key_exists('start', $data) || !array_key_exists('key', $data)) {
-                return null;
+            if (!$module['active']) {
+                continue;
             }
 
-            $data['path'] = $directory;
-
-            return $data;
-        }, glob($modulesFolder . DIRECTORY_SEPARATOR . '*', GLOB_ONLYDIR)));
-
-        $self           = new static;
-        $self->Modules  = collect($directories);
-
-        return $self;
-    }
-
-    /**
-     * Returns the related modules in a collection based on a side name.
-     * If no key is specified, it returns with all modules.
-     * 
-     * @param null|string $sideName The name of the Side by which the search can go.
-     * 
-     * @return \Illuminate\Support\Collection 
-     */
-    public function getModulesData(?string $sideName = null): Collection
-    {
-        $Data = null;
-
-        if (!is_null($sideName)) {
-            $Data = $this->Modules->where('side', $sideName);
-        } else {
-            $Data = $this->Modules;
+            include $module['path'] . DIRECTORY_SEPARATOR . $module['start'];
         }
-
-        return $Data;
     }
 }
