@@ -28,24 +28,40 @@ if (!file_exists(GOAT_VENDOR_ROOT . DIRECTORY_SEPARATOR . 'autoload.php')) {
  */
 require_once GOAT_VENDOR_ROOT . DIRECTORY_SEPARATOR . 'autoload.php';
 
-if (wp_doing_ajax()) {
-    /* TODO: Egyenlőre return null, de később call! */
-    return null;
+try {
+    if (wp_doing_ajax()) {
+        /* TODO: Egyenlőre return null, de később call! */
+        return null;
+    }
+    
+    if (wp_doing_cron()) {
+        /* TODO: Egyenlőre return null, de később call! */
+        return null;
+    }
+    
+    /** 
+     * Goat App Instance.
+     */
+    $Goat = \Goat\App::getInstance();
+
+    /** 
+     * List of providers.
+     * 
+     * @hook If another provider is required to run.
+     */
+    $providers = array_merge(
+        [
+            'modules' => \Goat\Foundation\Providers\ModuleProvider::class
+        ],
+        apply_filters('turbo_goat_extend_providers', [])
+    );
+    
+    /** 
+     * The party starts! ;)
+     */
+    $Goat->setContainer([
+        'providers' => $providers
+    ])->init()->run();
+} catch (\Exception $e) {
+    /* TODO: Error handler! */
 }
-
-if (wp_doing_cron()) {
-    /* TODO: Egyenlőre return null, de később call! */
-    return null;
-}
-
-/** 
- * Goat App Instance.
- */
-$Goat = \Goat\App::getInstance();
-
-/** 
- * The party starts! ;)
- */
-$Goat->setContainer([
-    'modules' => \Goat\Foundation\Providers\ModuleProvider::class
-])->run();
