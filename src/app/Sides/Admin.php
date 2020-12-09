@@ -24,5 +24,6 @@ class Admin extends Base
      */
     public function run(): void
     {
+        $this->registerProviders();
     }
 }

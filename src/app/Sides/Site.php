@@ -16,5 +16,6 @@ class Site extends Base
      */
     public function run(): void
     {
+        $this->registerProviders();
     }
 }
