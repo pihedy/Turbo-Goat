@@ -2,6 +2,8 @@
 
 namespace Goat;
 
+use \Goat\Interfaces\Provider;
+
 /** 
  * The App Class, which helps to install Goat.
  * 
@@ -17,6 +19,11 @@ class App
      * @var null|self Copy of the Goat App Class.
      */
     private static $instances = null;
+
+    /**
+     * @var \Goat\Container
+     */
+    private $Container;
 
     /**
      * @var \Goat\Sides\Admin|\Goat\Sides\Site Class filled with the right party.
@@ -45,7 +52,7 @@ class App
      */
     public function __wakeup()
     {
-        throw new \Exception('Cannot unserialize a singleton.');
+        throw new \Exception(msg('error.singleton_problem'));
     }
 
     /** 
@@ -73,13 +80,12 @@ class App
         }
 
         if (!$Container instanceof Interfaces\Container) {
-            throw new \InvalidArgumentException('Container incorrectly specified.');
+            throw new \InvalidArgumentException(msg('error.invalid_container'));
         }
 
-        $Side       = \is_admin() ? \Goat\Sides\Admin::class : \Goat\Sides\Site::class;
-        $this->Side = new $Side($Container);
+        $this->Container = $Container;
 
-        return $this->Side;
+        return $this;
     }
 
     /**
@@ -102,5 +108,27 @@ class App
     public function getSide(): object
     {
         return $this->Side;
+    }
+
+    /**
+     * Initializes the side class.
+     */
+    public function init(): self
+    {
+        $SideClass  = \is_admin() ? \Goat\Sides\Admin::class : \Goat\Sides\Site::class;
+        $this->Side = new $SideClass($this->Container);
+
+        return $this;
+    }
+
+    /**
+     * Once everything is done, the side will start, 
+     * with it the configured modules as well.
+     * 
+     * @return void 
+     */
+    public function run(): void
+    {
+        $this->Side->run();
     }
 }
