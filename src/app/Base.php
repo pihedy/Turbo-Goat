@@ -78,31 +78,13 @@ abstract class Base
      */
     public function setHooks(?object $class = null): HookBuilder
     {
-        try {
-            $HookBuilder = new \Goat\Builders\HookBuilder;
+        $HookBuilder = new \Goat\Builders\HookBuilder;
 
-            if (is_null($class)) {
-                $class = $this;
-            }
-
-            return $HookBuilder->initData($class);
-        } catch (\InvalidArgumentException $e) {
-            $this->log()->error(
-                'Invalid argument',
-                [
-                    'message'   => $e->getMessage(),
-                    'file'      => $e->getFile() . ' - ' . $e->getLine()
-                ]
-            );
-        } catch (\Exception $e) {
-            $this->log()->warning(
-                'Exception',
-                [
-                    'message'   => $e->getMessage(),
-                    'file'      => $e->getFile() . ' - ' . $e->getLine()
-                ]
-            );
+        if (is_null($class)) {
+            $class = $this;
         }
+
+        return $HookBuilder->initData($class);
     }
 
     /**
@@ -151,31 +133,21 @@ abstract class Base
      */
     public function getAssetUrl(?string $name, string $type = 'image'): string
     {
-        try {
-            if (is_null($name)) {
-                throw new \Exception(
-                    __('Name is required!', 'goat')
-                );
-            }
-
-            $file = GOAT_ROOT . DIRECTORY_SEPARATOR . 'asset' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . $name;
-
-            if (file_exists($file)) {
-                return plugin_dir_url(GOAT_FILE) . "asset/{$type}/{$name}";
-            } else {
-                throw new \Exception(
-                    sprintf(__('File (%s) or directory (%s) not found.', 'goat'), $name, $type)
-                );
-            }
-        } catch (\Exception $e) {
-            $this->log()->warning(
-                'Exception',
-                [
-                    'message'   => $e->getMessage(),
-                    'file'      => $e->getFile() . ' - ' . $e->getLine()
-                ]
+        if (is_null($name)) {
+            throw new \Exception(
+                __('Name is required!', 'goat')
             );
         }
+
+        $file = GOAT_ROOT . DIRECTORY_SEPARATOR . 'asset' . DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . $name;
+
+        if (!file_exists($file)) {
+            throw new \Exception(
+                sprintf(__('File (%s) or directory (%s) not found.', 'goat'), $name, $type)
+            );
+        }
+
+        return plugin_dir_url(GOAT_FILE) . "asset/{$type}/{$name}";
     }
 
     /**
@@ -189,58 +161,24 @@ abstract class Base
      */
     public function setScript(string $url, string $type, ?string $version = null): void
     {
-        try {
-            $avalible = [
-                'style',
-                'script'
-            ];
+        $avalible = [
+            'style',
+            'script'
+        ];
 
-            if (!in_array($type, $avalible)) {
-                throw new \Exception(
-                    __('The specified type is not available!', 'goat')
-                );
-            }
-
-            if (is_null($version)) {
-                $version = get_file_data(GOAT_FILE, ['Version' => 'Version'])['Version'];
-            }
-
-            $function = "wp_enqueue_{$type}";
-            $fileName = basename($url);
-
-            $function($fileName, $url, [], $version);
-        } catch (\Exception $e) {
-            $this->log()->info(
-                'Exception',
-                [
-                    'message'   => $e->getMessage(),
-                    'file'      => $e->getFile() . ' - ' . $e->getLine()
-                ]
+        if (!in_array($type, $avalible)) {
+            throw new \Exception(
+                __('The specified type is not available!', 'goat')
             );
         }
-    }
 
-    /**
-     * A class that makes a slug from a word or sentence.
-     * 
-     * @param string    $text   The word or phrase that is processed.
-     * @param string    $glue   The glue between the normalized word.
-     * 
-     * @return null|string The normalized word.
-     */
-    public function slugify(string $text, string $glue = '_'): ?string
-    {
-        $text = preg_replace('~[^\pL\d]+~u', $glue, $text);
-        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-        $text = preg_replace('~[^-\w]+~', '', $text);
-        $text = trim($text, $glue);
-        $text = preg_replace('~-+~', $glue, $text);
-        $text = strtolower($text);
-
-        if (empty($text)) {
-            return null;
+        if (is_null($version)) {
+            $version = get_file_data(GOAT_FILE, ['Version' => 'Version'])['Version'];
         }
 
-        return $text;
+        $function = "wp_enqueue_{$type}";
+        $fileName = basename($url);
+
+        $function($fileName, $url, [], $version);
     }
 }
