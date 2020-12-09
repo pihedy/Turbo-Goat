@@ -3,6 +3,7 @@
 namespace Goat;
 
 use \Goat\Builders\HookBuilder;
+use \Goat\Interfaces\Provider;
 use \Goat\Managers\TemplateManager;
 use \Monolog\Logger;
 
@@ -36,6 +37,24 @@ abstract class Base
      * Abstraction of the boot function.
      */
     abstract public function run();
+
+    /**
+     * Provider registration function for sides.
+     * 
+     * @return void 
+     */
+    protected function registerProviders(): void
+    {
+        foreach ($this->Container->get('providers') as $providerClass) {
+            $Provider = new $providerClass;
+
+            if (!$Provider instanceof Provider) {
+                continue;
+            }
+
+            $Provider->register();
+        }
+    }
 
     /** 
      * @param string $channel Specifies the channel name written in the queue.
