@@ -41,13 +41,11 @@ final class Messages
         $root       = $this->messages;
 
         foreach ($segments as $segment) {
-            if (array_key_exists($segment, $root)) {
-                $root = $root[$segment];
-
-                continue;
-            } else {
+            if (!array_key_exists($segment, $root)) {
                 return null;
             }
+
+            $root = $root[$segment];
         }
 
         return $root;
