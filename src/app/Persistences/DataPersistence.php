@@ -55,7 +55,7 @@ class DataPersistence implements Persistence
     {
         $cache = $this->Cache->load($key);
 
-        if (!is_null($cache)) {
+        if ($cache !== null) {
             $cache = array_merge($cache, $data);
         } else {
             $cache = $data;
@@ -79,11 +79,11 @@ class DataPersistence implements Persistence
     {
         $cache = $this->Cache->load($key);
 
-        if (is_null($cache)) {
+        if ($cache === null) {
             get_option("turbo_goat_{$key}", null);
         }
 
-        if (!is_null($cache)) {
+        if ($cache !== null) {
             $cache = unserialize($cache);
 
             $this->persist($key, $cache);

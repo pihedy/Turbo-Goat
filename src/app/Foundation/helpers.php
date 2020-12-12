@@ -35,7 +35,7 @@ if (!function_exists('msg')) {
     {
         $message = goat()->Container->get('messages')->get($key);
 
-        if (is_null($message)) {
+        if ($message === null) {
             $message = $return;
         }
 

@@ -99,7 +99,7 @@ abstract class Base
     {
         $HookBuilder = new \Goat\Builders\HookBuilder;
 
-        if (is_null($class)) {
+        if ($class === null) {
             $class = $this;
         }
 
@@ -152,7 +152,7 @@ abstract class Base
      */
     public function getAssetUrl(?string $name, string $type = 'image'): string
     {
-        if (is_null($name)) {
+        if ($name === null) {
             throw new \Exception(
                 __('Name is required!', 'goat')
             );
@@ -191,7 +191,7 @@ abstract class Base
             );
         }
 
-        if (is_null($version)) {
+        if ($version === null) {
             $version = get_file_data(GOAT_FILE, ['Version' => 'Version'])['Version'];
         }
 

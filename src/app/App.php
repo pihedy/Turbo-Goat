@@ -63,7 +63,7 @@ class App
      */
     public static function getInstance(): self
     {
-        if (is_null(static::$instances)) {
+        if (static::$instances === null) {
             static::$instances = new static;
         }
 
