@@ -26,13 +26,20 @@ if (!function_exists('msg')) {
     /**
      * Returns the translatable text from the message file.
      * 
-     * @param string $key The key to look for.
+     * @param string    $key        The key to look for.
+     * @param mixed     $return     If no text is found below the key, it returns.
      * 
      * @return string 
      */
-    function msg(string $key)
+    function msg(string $key, $return = null)
     {
-        /* TODO: Elkészítveni! */
+        $message = goat()->Container->get('messages')->get($key);
+
+        if (is_null($message)) {
+            $message = $return;
+        }
+
+        return $message;
     }
 }
 
