@@ -51,7 +51,8 @@ try {
      */
     $providers = array_merge(
         [
-            'modules' => \Goat\Foundation\Providers\ModuleProvider::class
+            'messages'  => \Goat\Foundation\Providers\MessageProvider::class,
+            'modules'   => \Goat\Foundation\Providers\ModuleProvider::class
         ],
         apply_filters('turbo_goat_extend_providers', [])
     );
