@@ -45,7 +45,9 @@ abstract class Base
      */
     protected function registerProviders(): void
     {
-        foreach ($this->Container->get('providers') as $providerClass) {
+        $providers = $this->Container->get('providers');
+
+        foreach ($providers as $providerClass) {
             $Provider = new $providerClass;
 
             if (!$Provider instanceof Provider) {
