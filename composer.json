@@ -20,7 +20,7 @@
         "vendor-dir": "src/app/Vendor"
     },
     "require": {
-        "php": ">=7.2.5",
+        "php": ">=7.2",
         "monolog/monolog": "^1.24",
         "pimple/pimple": "^3",
         "nette/caching": "^3.0",
