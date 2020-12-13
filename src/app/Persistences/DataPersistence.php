@@ -57,9 +57,9 @@ class DataPersistence implements Persistence
 
         if ($cache !== null) {
             $cache = array_merge($cache, $data);
-        } else {
-            $cache = $data;
         }
+        
+        $cache = $data;
 
         delete_option("turbo_goat_{$key}");
         

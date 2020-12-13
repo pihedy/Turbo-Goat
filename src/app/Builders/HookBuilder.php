@@ -64,13 +64,13 @@ final class HookBuilder
      */
     public function execute()
     {
-        if (isset($this->hookObject->class)) {
-            $class = $this->hookObject->class;
-        } else {
+        if (!isset($this->hookObject->class)) {
             throw new \InvalidArgumentException(
                 'The class property is missing from hookObject.'
             );
         }
+
+        $class = $this->hookObject->class;
 
         foreach ($this->hookObject->hooks as $hookValue) {
             array_walk($hookValue, function ($value) use ($class) {
