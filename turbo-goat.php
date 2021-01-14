@@ -11,7 +11,9 @@
 /** 
  * No direct access.
  */
-defined('ABSPATH') or die;
+if (!defined('ABSPATH')) {
+    return null;
+}
 
 /** 
  * Plugin directory root.

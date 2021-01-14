@@ -7,6 +7,13 @@
  */
 
 /** 
+ * No direct access.
+ */
+if (!defined('ABSPATH')) {
+    return null;
+}
+
+/** 
  * App directory root.
  */
 define('GOAT_APP_ROOT', GOAT_SRC_ROOT . DIRECTORY_SEPARATOR . 'app');
