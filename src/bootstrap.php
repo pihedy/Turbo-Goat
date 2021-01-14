@@ -20,7 +20,7 @@ define('GOAT_VENDOR_ROOT', GOAT_APP_ROOT . DIRECTORY_SEPARATOR . 'Vendor');
  * If composer autoload not found then die.
  */
 if (!file_exists(GOAT_VENDOR_ROOT . DIRECTORY_SEPARATOR . 'autoload.php')) {
-    wp_die(msg('error.install_composer'));
+    wp_die('Before install composer!');
 }
 
 /** 

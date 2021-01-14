@@ -32,7 +32,7 @@ define('GOAT_SRC_ROOT', GOAT_ROOT . DIRECTORY_SEPARATOR . 'src');
  * Load bootstrap file.
  */
 if (!file_exists(GOAT_SRC_ROOT . DIRECTORY_SEPARATOR . 'bootstrap.php')) {
-    wp_die(msg('error.bootstrap_not_found'));
+    wp_die('Bootstrap file not found!');
 }
 
 require_once GOAT_SRC_ROOT . DIRECTORY_SEPARATOR . 'bootstrap.php';
