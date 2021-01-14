@@ -57,13 +57,14 @@ class DataPersistence implements Persistence
 
         if ($cache !== null) {
             $cache = array_merge($cache, $data);
+        } else {
+            $cache = $data;
         }
-        
-        $cache = $data;
 
         delete_option("turbo_goat_{$key}");
         
         $this->Cache->save($key, $cache);
+        
         add_option("turbo_goat_{$key}", serialize($cache), '', 'no');
     }
 
