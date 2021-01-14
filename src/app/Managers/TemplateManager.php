@@ -31,7 +31,7 @@ class TemplateManager implements \Goat\Interfaces\Manager
      */
     public function __construct(array $start = [])
     {
-        $this->container = new \stdClass;
+        $this->container        = new \stdClass;
         $this->container->start = $start;
     }
 
@@ -46,8 +46,8 @@ class TemplateManager implements \Goat\Interfaces\Manager
     public function get(string $path, bool $self = false)
     {
         if ($self) {
-            $segments = explode('.', $path);
-            $root = implode(DIRECTORY_SEPARATOR, $segments);
+            $segments   = explode('.', $path);
+            $root       = implode(DIRECTORY_SEPARATOR, $segments);
         } else {
             $segments = explode('.', $path);
 
