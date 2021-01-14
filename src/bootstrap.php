@@ -33,7 +33,7 @@ if (!file_exists(GOAT_VENDOR_ROOT . DIRECTORY_SEPARATOR . 'autoload.php')) {
 /** 
  * Include autoload file.
  */
-require_once GOAT_VENDOR_ROOT . DIRECTORY_SEPARATOR . 'autoload.php';
+require GOAT_VENDOR_ROOT . DIRECTORY_SEPARATOR . 'autoload.php';
 
 try {
     if (wp_doing_ajax()) {

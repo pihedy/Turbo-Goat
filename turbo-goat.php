@@ -37,4 +37,4 @@ if (!file_exists(GOAT_SRC_ROOT . DIRECTORY_SEPARATOR . 'bootstrap.php')) {
     wp_die('Bootstrap file not found!');
 }
 
-require_once GOAT_SRC_ROOT . DIRECTORY_SEPARATOR . 'bootstrap.php';
+require GOAT_SRC_ROOT . DIRECTORY_SEPARATOR . 'bootstrap.php';
