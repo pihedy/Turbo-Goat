@@ -80,7 +80,7 @@ class MessageProvider implements Provider
                     continue;
                 }
 
-                $fileContent = include $Content->getPathname();
+                $fileContent = include($Content->getPathname());
 
                 if (!is_array($fileContent) || empty($fileContent)) {
                     continue;
