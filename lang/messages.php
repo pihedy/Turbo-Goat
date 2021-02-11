@@ -6,4 +6,6 @@
  * @author Pihe Edmond <pihedy@gmail.com>
  */
 
-return [];
+return [
+    'test' => __('Test Message', 'goat')
+];

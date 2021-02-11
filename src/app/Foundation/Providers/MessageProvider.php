@@ -22,6 +22,7 @@ class MessageProvider implements Provider
      */
     protected $registers = [
         'Messags',
+        'ModuleMessages'
     ];
 
     /**
@@ -64,6 +65,9 @@ class MessageProvider implements Provider
 
         $messages = [];
 
+        /** 
+         * @var string $directory
+         */
         foreach ($directories as $directory) {
             if (!is_dir($directory)) {
                 continue;
@@ -80,7 +84,7 @@ class MessageProvider implements Provider
                     continue;
                 }
 
-                $fileContent = include($Content->getPathname());
+                $fileContent = include $Content->getPathname();
 
                 if (!is_array($fileContent) || empty($fileContent)) {
                     continue;
@@ -93,5 +97,10 @@ class MessageProvider implements Provider
         }
 
         goat()->Container->set('messages', new Messages($messages));
+    }
+
+    public function registerModuleMessages()
+    {
+        $valami = goat()->Container->get('modules');
     }
 }

@@ -68,11 +68,11 @@ class ModuleProvider implements Provider
 
             $path = $Element->getPathname();
 
-            if (!file_exists($path . DIRECTORY_SEPARATOR . 'config.json')) {
+            if (!file_exists($path . DIRECTORY_SEPARATOR . 'config.php')) {
                 continue;
             }
 
-            $config             = json_decode(file_get_contents($path . DIRECTORY_SEPARATOR . 'config.json'), true);
+            $config             = include $path . DIRECTORY_SEPARATOR . 'config.php';
             $config['path']     = $path;
             $this->modules[]    = $config;
         }
