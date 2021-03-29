@@ -1,3 +1,6 @@
 <?php
 
-echo msg('test_module_site.messages.test');
+add_action('init', function () {
+    echo 'kecske';
+});
+
