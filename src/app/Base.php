@@ -117,29 +117,7 @@ abstract class Base
      */
     public function initModules(string $sideName): void
     {
-        $Modules        = $this->Container->get('modules')->getModulesData($sideName);
-        $ModulesData    = $this->Container->get('data')->findByKey('module_statuses');
-
-        $Modules->each(function (array $module) use ($ModulesData) {
-            if ($ModulesData->isEmpty()) {
-                return false;
-            }
-
-            $data           = $ModulesData->where('key', $module['key']);
-            $starterFile    = $module['path'] . DIRECTORY_SEPARATOR . $module['start'];
-            
-            do_action('turbo_goat_before_init_module', $module, $data);
-
-            if (!file_exists($starterFile)) {
-                return true;
-            }
-
-            if ($data['status']) {
-                include $starterFile;
-            }
-
-            do_action('turbo_goat_after_init_module', $module, $data);
-        });
+        $this->Container->get('modules')->initModulesBySite($sideName);
     }
 
     /**
