@@ -25,5 +25,6 @@ class Admin extends Base
     public function run(): void
     {
         $this->registerProviders();
+        $this->initModules(self::SIDE_NAME);
     }
 }
