@@ -33,7 +33,7 @@ class DataPersistence implements Persistence
     {
         $cacheFolder = apply_filters(
             'turbo_goat_cache_folder', 
-            WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'goat-cache'
+            WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'turbo-goat'
         );
 
         if (!file_exists($cacheFolder)) {
