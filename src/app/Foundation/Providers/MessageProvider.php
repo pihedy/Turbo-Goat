@@ -21,8 +21,8 @@ class MessageProvider implements Provider
      * @var array
      */
     protected $registers = [
-        'Messags',
-        'ModuleMessages'
+        'ModuleMessages',
+        'Messags'
     ];
 
     /**
@@ -40,10 +40,36 @@ class MessageProvider implements Provider
         /** 
          * @hook Here you can override the base folder where the message files are.
          */
-        $this->directory = apply_filters(
-            'turbo_goat_message_core_directory',
-            GOAT_ROOT . DIRECTORY_SEPARATOR . 'lang'
-        );
+        $this->directory = [
+            apply_filters('turbo_goat_message_core_directory', GOAT_ROOT . DIRECTORY_SEPARATOR . 'lang')
+        ];
+    }
+
+    /**
+     * Search for and register language files registered with the modules.
+     * 
+     * @return void 
+     */
+    public function registerModuleMessages(): void
+    {
+        $modules = goat()->Container->get('modules');
+
+        /** 
+         * @var array $module
+         */
+        foreach ($modules as $module) {
+            if (!$module['active']) {
+                continue;
+            }
+
+            $langPath = $module['path'] . DIRECTORY_SEPARATOR . 'lang';
+
+            if (!file_exists($langPath)) {
+                continue;
+            }
+
+            $this->directory[] = $langPath;
+        }
     }
 
     /**
@@ -56,14 +82,14 @@ class MessageProvider implements Provider
         /** 
          * @hook The filter can be used to expand the language container.
          */
-        $directories = array_merge(
-            [
-                $this->directory
-            ],
-            apply_filters('turbo_goat_message_directories', [])
-        );
+        $extLangDir = apply_filters('turbo_goat_message_directories', []);
 
-        $messages = [];
+        if (!is_array($extLangDir)) {
+            $extLangDir = [];
+        }
+
+        $directories    = array_merge($this->directory, $extLangDir);
+        $messages       = [];
 
         /** 
          * @var string $directory
@@ -97,10 +123,5 @@ class MessageProvider implements Provider
         }
 
         goat()->Container->set('messages', new Messages($messages));
-    }
-
-    public function registerModuleMessages()
-    {
-        $valami = goat()->Container->get('modules');
     }
 }
