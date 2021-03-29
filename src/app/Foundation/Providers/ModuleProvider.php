@@ -3,6 +3,10 @@
 namespace Goat\Foundation\Providers;
 
 use \Goat\Interfaces\Provider;
+use \Goat\Managers\ModuleActivityManager;
+use \Goat\Managers\ModuleDataManager;
+use \Goat\Managers\ModuleLoaderManager;
+use \Goat\Persistences\DataPersistence;
 use \Goat\Traits\ProviderTrait;
 
 /**
@@ -81,37 +85,34 @@ class ModuleProvider implements Provider
     /**
      * It launches the modules faithfully to the appropriate side.
      * 
-     * @return mixed 
+     * @return void 
      */
-    public function registerModules()
+    public function registerModules(): void
     {
         if (!is_array($this->modules) || empty($this->modules)) {
-            return null;
+            return;
         }
 
-        $modules = array_map(function ($module) {
-            /* TODO: Ez itt alapból false kell hogy legyen! */
-
+        $ModuleDataManager  = new ModuleDataManager(new DataPersistence);
+        $modules            = array_map(function (array $module) use ($ModuleDataManager) {
             /** 
              * @hook The activity status of a module can be overridden.
              */
-            $module['active'] = apply_filters('turbo_goat_module_activity_status', true, $module);
+            $module['active'] = apply_filters(
+                'turbo_goat_module_activity_status', 
+                ModuleActivityManager::getModuleActivityStatus($module['key']), 
+                $module
+            );
+
+            if (!$module['active']) {
+                return false;
+            }
+
+            $module['data'] = $ModuleDataManager->getDataByKey($module['key']);
 
             return $module;
         }, $this->modules);
 
-        goat()->Container->set('modules', $modules);
-
-        foreach ($modules as $module) {
-            if (array_key_exists('side', $module) && $module['side'] !== goat()::SIDE_NAME) {
-                continue;
-            }
-
-            if (!$module['active']) {
-                continue;
-            }
-
-            include $module['path'] . DIRECTORY_SEPARATOR . $module['start'];
-        }
+        goat()->Container->set('modules', new ModuleLoaderManager($modules));
     }
 }
