@@ -2,10 +2,13 @@
 
 /** 
  * Plugin Name: Turbo Goat
- * Description: TODO
+ * Plugin URI: https://github.com/pihedy/Turbo-Goat
+ * Description: The goat is also full, the cabbage is preserved.
  * Version: 1.0.0
  * Author: Pihedy
+ * Author URI: https://github.com/pihedy
  * Text Domain: goat
+ * Requires PHP: 7.0
  */
 
 /** 
