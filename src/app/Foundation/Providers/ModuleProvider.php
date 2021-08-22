@@ -7,6 +7,7 @@ use \Goat\Managers\ModuleActivityManager;
 use \Goat\Managers\ModuleDataManager;
 use \Goat\Managers\ModuleLoaderManager;
 use \Goat\Persistences\DataPersistence;
+use Goat\Repositories\DataRepository;
 use \Goat\Traits\ProviderTrait;
 
 /**
@@ -24,8 +25,7 @@ class ModuleProvider implements Provider
      * @var array
      */
     protected $registers = [
-        'Configs',
-        'Modules'
+        'FindModules'
     ];
 
     /**
@@ -61,7 +61,7 @@ class ModuleProvider implements Provider
      * 
      * @return void 
      */
-    public function registerConfigs(): void
+    protected function registerFindModules(): void
     {
         $DirectoryIterator = new \DirectoryIterator($this->directory);
 
@@ -80,39 +80,7 @@ class ModuleProvider implements Provider
             $config['path']     = $path;
             $this->modules[]    = $config;
         }
-    }
 
-    /**
-     * It launches the modules faithfully to the appropriate side.
-     * 
-     * @return void 
-     */
-    public function registerModules(): void
-    {
-        if (!is_array($this->modules) || empty($this->modules)) {
-            return;
-        }
-
-        $ModuleDataManager  = new ModuleDataManager(new DataPersistence);
-        $modules            = array_map(function (array $module) use ($ModuleDataManager) {
-            /** 
-             * @hook The activity status of a module can be overridden.
-             */
-            $module['active'] = apply_filters(
-                'turbo_goat_module_activity_status', 
-                ModuleActivityManager::getModuleActivityStatus($module['key']), 
-                $module
-            );
-
-            if (!$module['active']) {
-                return false;
-            }
-
-            $module['data'] = $ModuleDataManager->getDataByKey($module['key']);
-
-            return $module;
-        }, $this->modules);
-
-        goat()->Container->set('modules', new ModuleLoaderManager($modules));
+        goat()->Container->set('modules', collect($this->modules));
     }
 }
