@@ -109,18 +109,6 @@ abstract class Base
     }
 
     /**
-     * Initializes the modules to the appropriate side.
-     * 
-     * @param string $sideName The name of the side.
-     * 
-     * @return void 
-     */
-    public function initModules(string $sideName): void
-    {
-        $this->Container->get('modules')->initModulesBySite($sideName);
-    }
-
-    /**
      * The url of the file in the asset folder can be requested.
      * 
      * @param   string|null   $name   File name when you search.
