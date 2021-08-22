@@ -3,20 +3,14 @@
 namespace Goat\Sides;
 
 use \Goat\Base;
+use \Goat\Traits\SideTrait;
 
 class Site extends Base
 {
+    use SideTrait;
+
     /**
      * @var string A constant that specifies the name of the side.
      */
-    const SIDE_NAME = 'site';
-
-    /** 
-     * Starting the site section.
-     */
-    public function run(): void
-    {
-        $this->registerProviders();
-        $this->initModules(self::SIDE_NAME);
-    }
+    private $side = 'site';
 }

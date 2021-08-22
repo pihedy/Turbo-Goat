@@ -3,6 +3,7 @@
 namespace Goat\Sides;
 
 use \Goat\Base;
+use \Goat\Traits\SideTrait;
 
 /** 
  * The department responsible for the functions on the Admin site.
@@ -14,17 +15,10 @@ use \Goat\Base;
  */
 class Admin extends Base
 {
+    use SideTrait;
+
     /**
      * @var string A constant that specifies the name of the side.
      */
-    const SIDE_NAME = 'admin';
-
-    /** 
-     * Starting the admin section.
-     */
-    public function run(): void
-    {
-        $this->registerProviders();
-        $this->initModules(self::SIDE_NAME);
-    }
+    private $side = 'admin';
 }
