@@ -3,8 +3,6 @@
 namespace Goat\Persistences;
 
 use \Goat\Interfaces\Persistence;
-use \Nette\Caching\Storages\FileStorage;
-use \Nette\Caching\Cache;
 
 /**
  * Persistence class operating with Goat data.
@@ -17,12 +15,7 @@ use \Nette\Caching\Cache;
  */
 class DataPersistence implements Persistence
 {
-    /**
-     * The Nette cache object that is already loaded with the cache folder location.
-     * 
-     * @var \Nette\Caching\Cache
-     */
-    protected $Cache;
+    protected $cacheFolder;
 
     /**
      * Checks the cache folder and creates a Cache for the class.
@@ -31,16 +24,10 @@ class DataPersistence implements Persistence
      */
     public function __construct()
     {
-        $cacheFolder = apply_filters(
+        $this->cacheFolder = apply_filters(
             'turbo_goat_cache_folder', 
             WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'turbo-goat'
         );
-
-        if (!file_exists($cacheFolder)) {
-            mkdir($cacheFolder);
-        }
-
-        $this->Cache = new Cache(new FileStorage($cacheFolder));
     }
 
     /**
@@ -53,19 +40,10 @@ class DataPersistence implements Persistence
      */
     public function persist(string $key, array $data): void
     {
-        $cache = $this->Cache->load($key);
-
-        if ($cache !== null) {
-            $cache = array_merge($cache, $data);
-        } else {
-            $cache = $data;
-        }
-
-        delete_option("turbo_goat_{$key}");
-        
-        $this->Cache->save($key, $cache);
-        
-        add_option("turbo_goat_{$key}", serialize($cache), '', 'no');
+        /** 
+         * TODO: Ide még jön egy cache is!
+         */
+        update_option("turbo_goat_{$key}", $data, 'no');
     }
 
     /**
@@ -78,21 +56,12 @@ class DataPersistence implements Persistence
      */
     public function retrieve(string $key): array
     {
-        $cache = $this->Cache->load($key);
-
-        if ($cache === null) {
-            get_option("turbo_goat_{$key}", null);
-        }
-
-        if ($cache !== null) {
-            $cache = unserialize($cache);
-
-            $this->persist($key, $cache);
-        } else {
-            $cache = [];
-        }
+        /** 
+         * TODO: Ellenőrizni, hogy létezik-e cache!
+         */
+        $data = get_option("turbo_goat_{$key}", []);
         
-        return $cache;
+        return $data;
     }
 
     /**
@@ -104,7 +73,6 @@ class DataPersistence implements Persistence
      */
     public function delete(string $key): void
     {
-        $this->Cache->remove($key);
         delete_option("turbo_goat_{$key}");
     }
 }
